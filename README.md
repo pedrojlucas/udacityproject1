@@ -25,7 +25,7 @@ In this case we have used BanditPolicy early stopping, this kind of policy stops
 
 ## AutoML
 
-The model generated after running the AutoML pipeline was a VotingEnsembled model, this model is built by a StandardScaler for preprocessing the numerical features and a XGBoost algorithm for the classification.
+The model generated after running the AutoML pipeline was a VotingEnsembled model, this model is built by several differents machine learning models with different feature preprocessing strategies, all of them contributing to the final prediction of this ensembled model, the contribution of each model is weighted to maximize the accuracy of the model.
 
 ## Pipeline comparison
 
@@ -41,7 +41,7 @@ For the Scikit-learn model would be needed to try different hyperparameters to t
 
 For the AutoML we could increment the total number of iterations so we could check for additional combinations of different algorithms and hyperparameters for them.
 
-In order to get better perfomance in a inbalanced dataset, it can be useful to test undersampling of the minoritary class or oversampling of the majoritary class techniques, algorithms like SMOTE.
+In order to get better perfomance in a inbalanced dataset, it can be useful to test undersampling of the majoritary class or oversampling of the minoritary class techniques, algorithms like SMOTE.
 
 Finally I would also try different metrics to check the results obtained so far and to improve the behaviour of the models facing the case of an unbalanced dataset.
 
