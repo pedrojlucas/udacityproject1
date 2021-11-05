@@ -25,11 +25,24 @@ In this case we have used BanditPolicy early stopping, this kind of policy stops
 
 ## AutoML
 
-The model generated after running the AutoML pipeline was a VotingEnsembled model, this model is built by several differents machine learning models with different feature preprocessing strategies, all of them contributing to the final prediction of this ensembled model, the contribution of each model is weighted to maximize the accuracy of the model.
+The model generated after running the AutoML pipeline was a VotingEnsembled model, this model is built by several differents machine learning models with different feature preprocessing strategies, all of them contributing to the final prediction of this ensembled model, the contribution of each model is weighted to maximize the accuracy of the model. In this case AutoML has selected 5 algorithms:
+
+- MaxAbsScaler + LogisticRegressor, with a weight of 0.125
+- StandarScaler + XGBoost, with a weight of 0.125
+- MaxAbsScaler + Lightgbm, with a weight of 0.125
+- MaxAbsScaler + ExtremeRandomTrees, with a weight of 0.125
+- MaxAbsScaler + XGBoost, with a weight of 0.125
+- MaxAbsScaler + Lightgbm, with a weight of 0.125 (different hyperparameters from the previous one MaxAbsScaler+Lightgbm selected)
+
+During the data preprocessing phase AutoML has applied different checks to assure the quality of data:
+
+- It has checked for imbalance in the dataset. In this case AutoML has issued a recommendation to reduce imbalance in the dataset in order to reduce bias in the final predictions of the model.
+- Missing values imputation.
+- High Cardinality feature selection in the dataset.
 
 ## Pipeline comparison
 
-Both models have similar perfomance if we look at the main metric used: accuracy, both reaching values in the 0.91... what is a very high value for a classification if we assume that we have a balanced dataset for the target label (but it is not the case, and maybe it would be a better approach other metrics that take into account ).
+Both models have similar perfomance if we look at the main metric used: accuracy, both reaching values in the 0.91... what is a very high value for a classification if we assume that we have a balanced dataset for the target label (but it is not the case, and maybe it would be a better approach to take into account other metrics like F-1 score in order to compare properly both models).
 
 We have chosen to feed the models with the same preprocessed data (one hot encoding and the dates transformed to numerical) but inside the AutoML model architecture some additional steps in the preprocessing phase are taken, as scaling of numerical data. This can help the models to get information from the data more easily.
 
