@@ -13,7 +13,7 @@ For this purpose we will use two different approaches, the first one by a simple
 
 ## Scikit-learn Pipeline
 
-The frontend for all the interactions with the different part of the model is a Jupyter Notebook. On the backend we have a train.py script that does all the heavy work from a machine learning point of view, this scripts preprocess all the data and builds a dataset that has all the categorical variables transformed by one-hot encoding, all the dates are transformed to numerical format, inside the script the data is also splitted in train and test sets and finally a logistic regression algorithm is trained using two model parameters that are passed as arguments and accuracy metric is obtained.
+The frontend for all the interactions with the different parts of the model is a Jupyter Notebook. On the backend we have a train.py script that does all the heavy work from a machine learning point of view, this scripts preprocess all the data and builds a dataset that has all the categorical variables transformed by one-hot encoding, all the dates are transformed to numerical format, inside the script the data is also splitted in train and test sets and finally a logistic regression algorithm is trained using two model parameters that are passed as arguments and accuracy metric is obtained.
 
 This scripts with its arguments is used by an hyperdrive optimizer that tries to find the best hyperparameters for that model. Once this best hyperparameters are found, we train a logistic regression model with those hyperparameters and we save it.
 
@@ -25,20 +25,21 @@ In this case we have used BanditPolicy early stopping, this kind of policy stops
 
 ## AutoML
 
-The model generated after running the AutoML pipeline was a VotingEnsembled model, this model is built by several differents machine learning models with different feature preprocessing strategies, all of them contributing to the final prediction of this ensembled model, the contribution of each model is weighted to maximize the accuracy of the model. In this case AutoML has selected 5 algorithms:
-
-- MaxAbsScaler + LogisticRegressor, with a weight of 0.125
-- StandarScaler + XGBoost, with a weight of 0.125
-- MaxAbsScaler + Lightgbm, with a weight of 0.125
-- MaxAbsScaler + ExtremeRandomTrees, with a weight of 0.125
-- MaxAbsScaler + XGBoost, with a weight of 0.125
-- MaxAbsScaler + Lightgbm, with a weight of 0.125 (different hyperparameters from the previous one MaxAbsScaler+Lightgbm selected)
-
 During the data preprocessing phase AutoML has applied different checks to assure the quality of data:
 
 - It has checked for imbalance in the dataset. In this case AutoML has issued a recommendation to reduce imbalance in the dataset in order to reduce bias in the final predictions of the model.
 - Missing values imputation.
 - High Cardinality feature selection in the dataset.
+
+The model generated after running the AutoML pipeline was a VotingEnsembled model, this model is built by several differents machine learning models with different feature preprocessing strategies, all of them contributing to the final prediction of this ensembled model, the contribution of each model is weighted to maximize the accuracy of the model. In this case AutoML has selected 5 algorithms:
+
+- MaxAbsScaler + XGBoost, with a weight of 0.1
+- MaxAbsScaler + Lightgbm, with a weight of 0.3
+- SparseNormalizer + XGBoost, with a weight of 0.3
+- MaxAbsScaler + Lightgbm, with a weight of 0.2 (different hyperparameters from the previous one MaxAbsScaler+Lightgbm selected)
+- StandarScaler + XGBoost, with a weight of 0.1
+
+So this ensemble model uses mainly two algorithms based on decision trees that also use boosting tecniques for improving the predictioin capabilities like XGBoost and Ligthgbm, and applies different scaling techniques for the numerical features.
 
 ## Pipeline comparison
 
